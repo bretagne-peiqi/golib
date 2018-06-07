@@ -12,7 +12,7 @@ func main() {
 
 	go func(ctx context.Context) {
 		fmt.Println("routine ...")
-		<-ctx.Done()
+		//		<-ctx.Done()
 		fmt.Println("tested in goroutine")
 	}(ctx)
 

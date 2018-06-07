@@ -28,7 +28,7 @@ func main() {
 	wg.Add(1)
 	nodekey, _ := crypto.GenerateKey()
 	//fmt.Printf("the generated nodekey is %v \n", nodekey)
-	config := &p2p.Config{}
+	config := p2p.Config{}
 	config.MaxPeers = 10
 	config.Name = "my mac node"
 	config.ListenAddr = ":30300"

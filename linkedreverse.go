@@ -5,6 +5,28 @@ type Node struct {
 	Next *Node
 }
 
+func main2(head *Node) {
+
+	var ptr, p, q *Node
+	p = head.Next
+	q = nil
+	head.Next = nil
+
+	for {
+		if p != nil {
+			ptr = p.Next
+			p.next = q
+			q = p
+			p = ptr
+
+		} else {
+			break
+
+		}
+	}
+	head.Next = q
+}
+
 func main(head *Node) {
 	var ptr, p, q *Node
 	p = head.Next
@@ -21,5 +43,5 @@ func main(head *Node) {
 			break
 		}
 	}
-	head.next = q
+	head.Next = q
 }
