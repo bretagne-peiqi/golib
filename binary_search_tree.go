@@ -42,11 +42,89 @@ func Search(tree *Node, v int) bool {
 
 }
 
-func Delete(tree *Node, v int) bool {
-	if tree == nil {
+func Delete(t *Node, v int) bool {
+	if t == nil {
 		return false
 	}
-	return false
+
+	parent := t
+	found := false
+	for {
+		if t == nil {
+			break
+		}
+		if v == t.Data {
+			found = true
+			break
+		}
+
+		parent = t
+		if v < t.Data { //left
+			t = t.Left
+		} else {
+			t = t.Right
+		}
+	}
+
+	if found == false {
+		return false
+	}
+	return deleteNode(parent, t)
+}
+
+func deleteNode(parent, t *Node) bool {
+	if t.Left == nil && t.Right == nil {
+		fmt.Println("delete node which has neither left nor right subtree")
+		if parent.Left == t {
+			parent.Left = nil
+		} else if parent.Right == t {
+			parent.Right = nil
+		}
+		t = nil
+		return true
+	}
+
+	if t.Right == nil { // Right is vide
+		fmt.Println("delete node which has only left subnodes ")
+		parent.Left = t.Left
+		//parent.Data = t.Left.Data
+		//parent.Right = t.Left.Right
+		t.Left = nil
+		t = nil
+		return true
+	}
+
+	if t.Left == nil { // Left is vide
+		fmt.Println("delete node which has only right subnodes ")
+		//parent.Left = t.Right.Left
+		//parent.Data = t.Right.Data
+		parent.Right = t.Right
+		t.Right = nil
+		t = nil
+		return true
+	}
+
+	fmt.Println("delete node which has right and left subtree")
+	previous := t
+	next := t.Left
+	for {
+		if next.Right == nil {
+			break
+		}
+		previous = next
+		next = next.Right
+	}
+
+	t.Data = next.Data
+	if previous.Left == next {
+		previous.Left = next.Left
+	} else {
+		previous.Right = next.Right
+	}
+	next.Left = nil
+	next.Right = nil
+	next = nil
+	return true
 }
 
 func Print(tree *Node) {
@@ -88,14 +166,15 @@ func GetMax(tree *Node) (int, error) {
 
 func main() {
 	var tree *Node = nil
-	var original = []int{44, 2, 3, 4, 7, 8, 1, 9, 99, 100}
+	var original = []int{44, 2, 3, 4, 7, 8, 1, 9, 99, 100, 5, 6}
 	for _, v := range original {
 		tree = Insert(tree, v)
 	}
 	Print(tree)
 	ok := Search(tree, 2)
 	fmt.Printf("search result is %v \n", ok)
-
+	Delete(tree, 4)
+	Print(tree)
 	max, bo := GetMax(tree)
 	min, boo := GetMin(tree)
 	if bo == nil && boo == nil {
